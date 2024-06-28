@@ -107,7 +107,7 @@ const ChatMessages: FC<ChatMessagesProps> = ({
         <IntroBanner
           type={type}
           name={name}
-          creationDate={workspaceData.created_at}
+          creationDate={channelData?.created_at!}
         />
       )}
       {hasNextPage && (

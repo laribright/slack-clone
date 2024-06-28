@@ -1,0 +1,116 @@
+create table
+  users (
+    id uuid primary key references auth.users (id) not null,
+    email text unique not null,
+    name text,
+    type text default 'user' check (
+      type in ('user', 'admin', 'regulator')
+    ),
+    avatar_url text not null,
+    created_at timestamp default current_timestamp,
+    is_away boolean default false not null,
+    phone text,
+    workplaces text[],
+    channels text[]
+  );
+
+alter table users enable row level security;
+
+create policy "Can view own user data." on users for
+select
+  using (auth.uid () = id);
+
+create policy "Can update own user data." on users
+for update
+  using (auth.uid () = id);
+
+create
+or replace function public.handle_new_user () returns trigger as $$
+begin
+  if new.raw_user_meta_data->>'avatar_url' is null or new.raw_user_meta_data->>'avatar_url' = '' then
+    new.raw_user_meta_data = jsonb_set(new.raw_user_meta_data, '{avatar_url}', '"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"' ::jsonb);
+  end if;
+  insert into public.users (id, name, type, email, avatar_url)
+  values (new.id, new.raw_user_meta_data->>'full_name', 'user', new.email, new.raw_user_meta_data->>'avatar_url');
+  return new;
+end;
+$$ language plpgsql security definer;
+
+create
+or replace trigger on_auth_user_created
+after insert on auth.users for each row
+execute procedure public.handle_new_user ();
+
+
+
+ADD USER TO WORKSPACE
+create
+or replace function add_workspace_to_user (user_id uuid, new_workspace text) returns void as $$
+BEGIN
+  update users set workspaces = workspaces || array[new_workspace]
+  where id = user_id;
+END;
+$$ language plpgsql;
+
+CREATE CHANNELS
+create table
+  channels (
+    id uuid primary key default gen_random_uuid () not null,
+    name text not null,
+    workspace_id uuid references public.workspaces (id) not null,
+    user_id uuid references public.users (id) not null,
+    members text[],
+    regulators text[]
+  );
+
+alter table channels enable row level security;
+
+create policy "Can view own user data." on channels for
+select
+  using (auth.uid () = user_id);
+
+create policy "Can update own user data." on channels
+for update
+  using (auth.uid () = user_id);
+
+create policy "Can insert own user data." on channels for insert
+with
+  check (auth.uid () = user_id);
+
+
+UPDATE USER CHANNELS
+create
+or replace function update_user_channels (user_id uuid, channel_id text) returns void as $$
+BEGIN
+  update users set channels = channels || array[channel_id]
+  where id = user_id;
+END;
+$$ language plpgsql;
+
+UPDATE CHANNEL MEMBERS
+create
+or replace function update_channel_members (new_member text, channel_id uuid) returns void as $$
+BEGIN
+  update channels set members = members || array[new_member]
+  where id = channel_id;
+END;
+$$ language plpgsql;
+
+
+UPDATE WORKSPACE CHANNEL
+create
+or replace function add_channel_to_workspace (channel_id text, workspace_id uuid) returns void as $$
+begin
+  update workspaces set channels = channels || array[channel_id]
+  where id = workspace_id;
+end;
+$$ language plpgsql;
+
+UPDATE CHANNEL REGULATORS
+create
+or replace function update_channel_regulators (new_regulator text, channel_id uuid) returns void as $$
+BEGIN
+  update channels set regulators = regulators || array[new_regulator]
+  where id = channel_id;
+END;
+$$ language plpgsql;

@@ -1,0 +1,15 @@
+SUPABASE SSR
+https://supabase.com/docs/guides/auth/server-side/creating-a-client?queryGroups=environment&environment=client-component
+
+SUPABASE OAUTH
+https://supabase.com/docs/guides/auth/server-side/oauth-with-pkce-flow-for-ssr
+
+SUPABASE TYPES
+https://supabase.com/docs/guides/api/rest/generating-types
+
+UPLOADTHING
+https://uploadthing.com/
+https://docs.uploadthing.com/
+
+NEXTJS-IMAGE_CONFIG
+https://nextjs.org/docs/messages/next-image-unconfigured-host

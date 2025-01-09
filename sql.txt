@@ -10,7 +10,7 @@ create table
     created_at timestamp default current_timestamp,
     is_away boolean default false not null,
     phone text,
-    workplaces text[],
+    workspaces text[],
     channels text[]
   );
 
@@ -114,3 +114,15 @@ BEGIN
   where id = channel_id;
 END;
 $$ language plpgsql;
+
+Add member to workspace
+create or replace function add_member_to_workspace(user_id text, workspace_id uuid) returns void as $$
+begin
+  update workspaces set members = members || array[user_id]
+  where id = workspace_id;
+end;
+$$ language plpgsql;
+
+create policy "SuperAdminCanUpdate" on "public"."workspaces" as permissive
+for update
+to public using ("super_admin" = auth.uid());

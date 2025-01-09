@@ -51,13 +51,10 @@ const Step1 = () => {
 
   return (
     <>
-      <Typography
-        text='What is the name of your company or team'
-        className='my-4'
-      />
+      <Typography text='What is the name of your team' className='my-4' />
 
       <Typography
-        text='This will be the name of your Slackzz workspace - choose something that your team will recognize.'
+        text='This will be the name of your DraftRoom league - choose something that your team will recognize.'
         className='text-neutral-300'
         variant='p'
       />
@@ -68,7 +65,7 @@ const Step1 = () => {
             className='bg-neutral-700 text-white border-neutral-600'
             type='text'
             value={name}
-            placeholder='Enter your company name'
+            placeholder='Enter your room name'
             onChange={event => updateValues({ name: event.target.value })}
           />
           <Button
@@ -99,9 +96,9 @@ const Step2 = () => {
     setIsSubmitting(false);
     if (error?.error) {
       console.log(error);
-      return toast.error("Couldn't create workspace. Please try again.");
+      return toast.error("Couldn't create league. Please try again.");
     }
-    toast.success('Workspace created successfully');
+    toast.success('League created successfully');
     router.push('/');
   };
 
@@ -117,9 +114,9 @@ const Step2 = () => {
       </Button>
 
       <form>
-        <Typography text='Add workspace avatar' className='my-4' />
+        <Typography text='Add team avatar' className='my-4' />
         <Typography
-          text='This image can be changed later in your workspace settings.'
+          text='This image can be changed later in your team settings.'
           className='text-neutral-300'
           variant='p'
         />

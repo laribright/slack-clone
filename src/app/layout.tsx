@@ -10,8 +10,8 @@ const lato = Lato({
 });
 
 export const metadata: Metadata = {
-  title: 'Slackzz',
-  description: 'Slack clone codewithlari',
+  title: 'DraftRoom',
+  description: 'DraftRoom is a platform for drafting fantasy sports leagues.',
 };
 
 export const revalidate = 0;

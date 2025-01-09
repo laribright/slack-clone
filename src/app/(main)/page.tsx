@@ -7,9 +7,9 @@ export default async function Home() {
 
   if (!userData) return redirect('/auth');
 
-  const userWorkspaceId = userData.workspaces?.[0];
+  const leagueId = userData.workspaces?.[0];
 
-  if (!userWorkspaceId) return redirect('/create-workspace');
+  if (!leagueId) return redirect('/create-league');
 
-  if (userWorkspaceId) return redirect(`/workspace/${userWorkspaceId}`);
+  if (leagueId) return redirect(`/league/${leagueId}`);
 }

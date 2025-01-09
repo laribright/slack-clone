@@ -12,9 +12,9 @@ import { getUserWorkspaceChannels } from '@/actions/get-user-workspace-channels'
 import NoDataScreen from '@/components/no-data-component';
 
 const Workspace = async ({
-  params: { workspaceId },
+  params: { leagueId },
 }: {
-  params: { workspaceId: string };
+  params: { leagueId: string };
 }) => {
   const userData = await getUserData();
 
@@ -22,7 +22,7 @@ const Workspace = async ({
 
   const [userWorkspaceData] = await getUserWorkspaceData(userData.workspaces!);
 
-  const [currentWorkspaceData] = await getCurrentWorksaceData(workspaceId);
+  const [currentWorkspaceData] = await getCurrentWorksaceData(leagueId);
 
   const userWorkspaceChannels = await getUserWorkspaceChannels(
     currentWorkspaceData.id,

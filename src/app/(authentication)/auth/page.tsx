@@ -8,6 +8,7 @@ import { z } from 'zod';
 import { Provider } from '@supabase/supabase-js';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 import Typography from '@/components/ui/typography';
 import { Button } from '@/components/ui/button';
@@ -65,6 +66,7 @@ const AuthPage = () => {
       console.warn('Sign in error', error);
       return;
     }
+    toast.success('Email sent');
   }
 
   async function socialAuth(provider: Provider) {
@@ -85,11 +87,11 @@ const AuthPage = () => {
       <div className='max-w-[450px]'>
         <div className='flex justify-center items-center gap-3 mb-4'>
           <BsSlack size={30} />
-          <Typography text='Slackzz' variant='h2' />
+          <Typography text='DraftRoom' variant='h2' />
         </div>
 
         <Typography
-          text='Sign in to your Slackzz'
+          text='Sign in to your DraftRoom account'
           variant='h2'
           className='mb-3'
         />

@@ -47,7 +47,7 @@ const PreferencesDialog = () => {
             <Typography
               variant='p'
               className='pb-4'
-              text='Choose if slackzz appearance should be light or dark, or follow the computer settings'
+              text='Choose if draftRoom appearance should be light or dark, or follow the computer settings'
             />
             <div className='flex flex-wrap gap-3'>
               <Button
